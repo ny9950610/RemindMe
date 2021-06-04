@@ -7,11 +7,11 @@
 3. 將程式縮小到隱藏的圖示  
 
 ## 示意圖
-![image](https://github.com/ny9950610/RemindMe/blob/master/example1.JPG)
+![image](https://github.com/ny9950610/RemindMe/blob/master/example1.jpg)
 
-![image](https://github.com/ny9950610/RemindMe/blob/master/example2.JPG)
+![image](https://github.com/ny9950610/RemindMe/blob/master/example2.jpg)
 
-![image](https://github.com/ny9950610/RemindMe/blob/master/example3.JPG)
+![image](https://github.com/ny9950610/RemindMe/blob/master/example3.jpg)
 
 ## 後續計畫
 1. 開機自動開啟程式  
