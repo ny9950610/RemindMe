@@ -2,7 +2,9 @@
 #define EVENTWINDOW_H
 
 #include <QDialog>
+#include <QString>
 #include <headers/eventInfo.h>
+
 
 namespace Ui { class EventWindow ; }
 
@@ -11,9 +13,9 @@ class EventWindow : public QDialog
     Q_OBJECT
 
 public:
-    EventWindow( QWidget *parent = nullptr ) ;
+    EventWindow( QString, QWidget *parent = nullptr ) ;
 
-    EventWindow( QString, QTime, QWidget *parent = nullptr ) ;
+    EventWindow( QString, QString, QTime, QWidget *parent = nullptr ) ;
 
     ~EventWindow() ;
 
@@ -27,6 +29,10 @@ private slots:
 
 private:
     Ui::EventWindow *ui ;
+
+    void setTime( QString&, QString&, bool&, QTime ) ;
+    QTime getTime_t1( QString, QString, bool ) ;
+    QTime getTime_t2( QString, QString ) ;
 };
 
 #endif // EVENTWINDOW_H

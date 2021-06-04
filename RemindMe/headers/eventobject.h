@@ -3,6 +3,7 @@
 
 #include <QObject>
 
+
 class EventObject : public QObject
 {
     Q_OBJECT

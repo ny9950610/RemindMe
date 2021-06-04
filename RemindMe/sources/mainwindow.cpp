@@ -3,18 +3,45 @@
 #include "headers/eventwindow.h"
 #include <qdebug.h>
 
+
 MainWindow::MainWindow( QWidget *parent ) : QMainWindow( parent ) , ui( new Ui::MainWindow ) {
     ui->setupUi( this ) ;
+
+    // 設定trayIcon
+    trayIcon = new QSystemTrayIcon( this ) ;
+    trayIcon->setIcon( QIcon(":/images/icon.png") ) ;
+    trayIcon->setToolTip( "RemindMe" ) ;
+    trayIcon->show() ;
+    connect(trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::iconActivated );
+
+    // 設定trayIconMenu的quitAction
+    quitAction = new QAction( "關閉", this ) ;
+    connect(quitAction, SIGNAL( triggered() ), qApp, SLOT( quit() ) ) ;
+
+    trayIconMenu = new QMenu( this ) ;
+    trayIconMenu->addAction( quitAction ) ;
+    trayIcon->setContextMenu( trayIconMenu ) ;
 }
 
 MainWindow::~MainWindow() {
     delete ui ;
 }
 
+/* 決定user跟trayIcon互動後會有甚麼反應 */
+void MainWindow::iconActivated( QSystemTrayIcon::ActivationReason reason ) {
+    switch (reason) {
+        // 雙擊後使mainwindow顯現
+        case QSystemTrayIcon::DoubleClick:
+            this->show() ;
+            break;
+        default:
+            break;
+    }
+}
 
 /* 按下addEventButton後 跳出addEventWindow */
 void MainWindow::on_addEvent_clicked() {
-    EventWindow *window = new EventWindow() ;
+    EventWindow *window = new EventWindow( "新增事件" ) ;
     connect( window, SIGNAL( sendData( QString, QTime ) ), this, SLOT( createEvent( QString, QTime ) ) ) ; // 當window關閉 回傳eventInfo並createEvent
     window->exec() ;
 }
@@ -22,7 +49,7 @@ void MainWindow::on_addEvent_clicked() {
 /* 按下changeEventButton後 更改目前選擇event的內容 */
 void MainWindow::on_changeEvent_clicked() {
     if ( currentEvent != -1 ) {
-        EventWindow *window = new EventWindow( eventList[currentEvent]->description, eventList[currentEvent]->time ) ;
+        EventWindow *window = new EventWindow( "更改事件", eventList[currentEvent]->description, eventList[currentEvent]->time ) ;
         connect( window, SIGNAL( sendData( QString, QTime ) ), this, SLOT( modifyEvent( QString, QTime ) ) ) ; // 當window關閉 回傳eventInfo並createEvent
         window->exec() ;
      }
@@ -30,7 +57,7 @@ void MainWindow::on_changeEvent_clicked() {
 
 /* 按下changeEventButton後 刪除目前選擇的event */
 void MainWindow::on_deleteEvent_clicked() {
-    deleteEvent() ;
+    deleteEvent( currentEvent ) ;
 }
 
 /* 根據回傳的eventInfo建立event */
@@ -43,8 +70,9 @@ void MainWindow::createEvent( QString description, QTime time ) {
     QPushButton *eventButton = new QPushButton( description ) ;
     connect( eventButton, &QPushButton::clicked, this, [this,i]() { showData( i ) ; } ) ; // 按下eventButton後 在label中顯示eventInfo
 
+    // 建立event
     EventInfo *event = new EventInfo( description, time, eventButton ) ;
-    connect( event, SIGNAL( eventEnd() ), this, SLOT( deleteEvent() ) );
+    connect( event, &EventInfo::eventEnd, this, [this,i]() { deleteEvent( i ) ; } ) ;
 
     // 將data存入eventList
     eventList[i] = event ;
@@ -67,10 +95,10 @@ void MainWindow::modifyEvent( QString description, QTime time ) {
 }
 
 /* 刪除currentEvent */
-void MainWindow::deleteEvent() {
-    if ( currentEvent != -1 ) {
-        eventList[currentEvent]->button->close() ;
-        delete eventList[currentEvent] ;
+void MainWindow::deleteEvent( int i ) {
+    if ( i != -1 ) {
+        eventList[i]->button->close() ;
+        delete eventList[i] ;
      }
 
     showData( -1 ) ;

@@ -7,7 +7,6 @@
 #include <QTime>
 #include <QMediaPlayer>
 
-using namespace std ;
 
 class EventInfo : public EventObject {
     Q_OBJECT

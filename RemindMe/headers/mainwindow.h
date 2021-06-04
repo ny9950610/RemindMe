@@ -6,6 +6,8 @@
 #include <QPushButton>
 #include <qmap.h>
 #include <headers/eventInfo.h>
+#include <qsystemtrayicon.h>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow ; }
@@ -27,6 +29,8 @@ public:
     QLayout *layout = new QVBoxLayout() ;
 
 private slots:
+    void iconActivated( QSystemTrayIcon::ActivationReason ) ;
+
     void on_addEvent_clicked() ;
 
     void on_changeEvent_clicked() ;
@@ -37,11 +41,14 @@ private slots:
 
     void modifyEvent( QString, QTime ) ;
 
-    void deleteEvent() ;
+    void deleteEvent( int ) ;
 
     void showData( int ) ;
 
 private:
     Ui::MainWindow *ui ;
+    QSystemTrayIcon *trayIcon ;
+    QMenu *trayIconMenu ;
+    QAction *quitAction ;
 };
 #endif // MAINWINDOW_H

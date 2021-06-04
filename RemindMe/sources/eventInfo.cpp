@@ -3,6 +3,7 @@
 #include <qdebug.h>
 #include <QCoreApplication>
 
+
 EventInfo::EventInfo( QString description , QTime time, QPushButton *button ) {
     // 根據參數設定資料
     this->description = description ;
@@ -13,6 +14,7 @@ EventInfo::EventInfo( QString description , QTime time, QPushButton *button ) {
     timer = startTimer( 1000 ) ;
 }
 
+/* 當設定的時間到了 跳出提醒並撥放鈴聲 */
 void EventInfo::timerEvent( QTimerEvent *event ) {
     // 取得現在時間
     QTime nowTime( QTime::currentTime() );
@@ -22,7 +24,7 @@ void EventInfo::timerEvent( QTimerEvent *event ) {
         TimeUpWindow *window = new TimeUpWindow( description ) ;
         connect( window, SIGNAL( timeUp() ), this, SLOT( callDeleteEvent() ) ) ;
 
-        // 加入音效
+        // 播放音效
         sound = new QMediaPlayer() ;
         sound->setMedia( QUrl( "qrc:/sounds/sound.mp3" ) ) ;
         sound->play();

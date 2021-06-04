@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QString>
 
+
 namespace Ui { class TimeUpWindow ; }
 
 class TimeUpWindow : public QDialog
