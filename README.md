@@ -1,5 +1,6 @@
 # RemindMe
 在PC上執行的鬧鐘  
+https://drive.google.com/file/d/1UyJS7gb1iLmegBYcPffOEXt0bYTiKwOj/view?usp=sharing
 
 # Feature
 1. 同時設置多個鬧鐘  
